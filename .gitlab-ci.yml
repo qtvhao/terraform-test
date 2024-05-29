@@ -4,9 +4,20 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Terraform.gitlab-ci.yml
 variables:
   TF_AUTO_DEPLOY: "true"
+  TF_STATE_NAME: default      # The name of the state file used by the GitLab Managed Terraform state backend
 
 include:
   - template: Terraform/Base.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.gitlab-ci.yml
+
+.terraform:deploy:
+  stage: deploy
+  script:
+    - gitlab-terraform apply
+  resource_group: ${TF_STATE_NAME}
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $TF_AUTO_DEPLOY == "true"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
 
 stages:
   - validate
