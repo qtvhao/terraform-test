@@ -5,18 +5,18 @@ locals {
   samba_password = random_id.samba_password.hex
 }
 
-resource "kubernetes_deployment_v1" "samba" {
+resource "kubernetes_deployment_v1" "samba-test" {
   metadata {
-    name = "samba"
+    name = "samba-test"
     labels = {
-      "io.kompose.service" = "samba"
+      "io.kompose.service" = "samba-test"
     }
   }
   spec {
     replicas = 1
     selector {
       match_labels = {
-        "io.kompose.service" = "samba"
+        "io.kompose.service" = "samba-test"
       }
     }
     strategy {
@@ -26,7 +26,7 @@ resource "kubernetes_deployment_v1" "samba" {
       metadata {
         labels = {
           "io.kompose.network/samba-samba" = "true"
-          "io.kompose.service"             = "samba"
+          "io.kompose.service"             = "samba-test"
         }
       }
       spec {
