@@ -22,8 +22,8 @@ include:
 .terraform:build:
   stage: build
   script:
-    - bash -c "set -x;while true; do gitlab-terraform plan       2>&1 >output.txt; cat output.txt | grep 'Your infrastructure matches the configuration' && cat output.txt && exit 0; cat output.txt | grep Unauthorized && sleep 15 || {echo 1; cat output.txt; exit 0}; done"
-    - bash -c "set -x;while true; do gitlab-terraform plan-json  2>&1 >output.txt; cat output.txt | grep 'Your infrastructure matches the configuration' && cat output.txt && exit 0; cat output.txt | grep Unauthorized && sleep 15 || {echo 1; cat output.txt; exit 0}; done"
+    - bash -c "set -x;while true; do gitlab-terraform plan       2>&1 >output.txt; cat output.txt | grep 'Your infrastructure matches the configuration' && cat output.txt && exit 0; cat output.txt | grep Unauthorized && sleep 15 || { cat output.txt; exit 0; }; done"
+    - bash -c "set -x;while true; do gitlab-terraform plan-json  2>&1 >output.txt; cat output.txt | grep 'Your infrastructure matches the configuration' && cat output.txt && exit 0; cat output.txt | grep Unauthorized && sleep 15 || { cat output.txt; exit 0; }; done"
   resource_group: ${TF_STATE_NAME}
   artifacts:
     # The next line, which disables public access to pipeline artifacts, may not be available everywhere.
