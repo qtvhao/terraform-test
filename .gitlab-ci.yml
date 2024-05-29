@@ -12,7 +12,7 @@ include:
 .terraform:deploy:
   stage: deploy
   script:
-    - sh -c "while true; do output=$(gitlab-terraform apply 2>&1);       echo $output 2>&1 | grep Unauthorized && sleep 15 || break; done"
+    - sh -c "while true; do output=$(gitlab-terraform apply 2>&1);       echo $output 2>&1 | grep Unauthorized && sleep 15 || (echo $output && break); done"
   resource_group: ${TF_STATE_NAME}
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $TF_AUTO_DEPLOY == "true"
@@ -22,8 +22,8 @@ include:
 .terraform:build:
   stage: build
   script:
-    - sh -c "while true; do output=$(gitlab-terraform plan 2>&1);       echo $output 2>&1 | grep Unauthorized && sleep 15 || break; done"
-    - sh -c "while true; do output=$(gitlab-terraform plan-json 2>&1);  echo $output 2>&1 | grep Unauthorized && sleep 15 || break; done"
+    - sh -c "while true; do output=$(gitlab-terraform plan 2>&1);       echo $output 2>&1 | grep Unauthorized && sleep 15 || (echo $output && break); done"
+    - sh -c "while true; do output=$(gitlab-terraform plan-json 2>&1);  echo $output 2>&1 | grep Unauthorized && sleep 15 || (echo $output && break); done"
   resource_group: ${TF_STATE_NAME}
   artifacts:
     # The next line, which disables public access to pipeline artifacts, may not be available everywhere.
