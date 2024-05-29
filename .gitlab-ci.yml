@@ -12,7 +12,7 @@ include:
 .terraform:deploy:
   stage: deploy
   script:
-    - while true; do gitlab-terraform apply | grep "Unauthorized" && sleep 15 || break; done
+    - while true; do gitlab-terraform apply 2>&1 | grep "Unauthorized" && sleep 15 || break; done
   resource_group: ${TF_STATE_NAME}
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $TF_AUTO_DEPLOY == "true"
